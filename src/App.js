@@ -11,6 +11,7 @@ export default function App() {
   const [description, setDescription] = useState("");
   const [products, setProducts] = useState([]);
   const [file_, setFile] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
 
   async function uploadImage(file) {
     if (!file) return null;
@@ -19,12 +20,11 @@ export default function App() {
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
       const { data, error } = await supabase.storage
-        .from("avatars") // your storage bucket name
+        .from("avatars")  
         .upload(fileName, file);
 
       if (error) throw error;
 
-      // Get public URL
       const { data: urlData } = supabase.storage
         .from("avatars")
         .getPublicUrl(fileName);
@@ -39,6 +39,7 @@ export default function App() {
   async function addProduct() {
     if (name?.trim()?.length == 0 || description?.trim()?.length == 0)
       return alert("ದಯವಿಟ್ಟು ಎಲ್ಲವನ್ನೂ ಭರ್ತಿ ಮಾಡಿ");
+    setIsLoading(true)
     const imageUrl = await uploadImage(file_);
     const uniqueId = `${Date.now()}-${Math.random()
       .toString(36)
@@ -58,6 +59,7 @@ export default function App() {
       setName("");
       setDescription("");
       setFile("");
+      setIsLoading(false)
       const phone = "+918050905047";
       const message = `New Product Added:\nName: ${name}\nDetails: ${description}\nImage: ${
         imageUrl || "No Image"
@@ -65,10 +67,11 @@ export default function App() {
       const encodedMessage = encodeURIComponent(message);
 
       const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
-      window.open(whatsappUrl, "_blank"); // opens WhatsApp Web or app
+      window.open(whatsappUrl, "_blank");  
       getProducts();
     } catch (error) {
-      alert(error.message);
+      setIsLoading(false)
+      alert('Something went wrong');
     } finally {
     }
   }
@@ -148,7 +151,7 @@ export default function App() {
                 <PhotoCamera />
               </IconButton>
             </Button>
-            <Button variant="contained" onClick={() => addProduct()}>
+            <Button variant="contained" loading={isLoading}  onClick={() => addProduct()}>
               Add Product
             </Button>
           </Box>

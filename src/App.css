@@ -1,4 +1,3 @@
-
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -14,7 +13,7 @@ body {
 .header-container {
   width: 100%;
   padding: 10px 1px;
-  background-color:#20164e;
+  background-color: #20164e;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,15 +21,23 @@ body {
   color: #fff;
   box-shadow: 0 4px 12px rgba(1, 0, 8, 0.4);
 }
-.sales-list{
-  font-size: 20px;           /* Text size */
-  font-weight: 600;          /* Bold text */
-  color: #ffffff;            /* Text color */
-  background-color: #3F51B5; /* Background color */
-  padding: 10px 20px;        /* Spacing inside the header */
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow */
-  margin: 15px 0; 
+
+.sales-list {
+  font-size: 20px;
+  /* Text size */
+  font-weight: 600;
+  /* Bold text */
+  color: #ffffff;
+  /* Text color */
+  background-color: #3F51B5;
+  /* Background color */
+  padding: 10px 20px;
+  /* Spacing inside the header */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow */
+  margin: 15px 0;
 }
+
 .header-container h3 {
   color: #fff;
   font-size: 20px;
@@ -40,12 +47,13 @@ body {
 .create-product-container {
   margin: 20px 0;
   padding: 20px;
- box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;}
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
 
 h3 {
   margin-bottom: 15px;
   text-align: center;
- 
+
 }
 
 .product-list-container {
