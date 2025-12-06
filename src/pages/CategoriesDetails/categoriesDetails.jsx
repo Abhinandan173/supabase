@@ -12,6 +12,7 @@ import {
 import SimpleHeader from "../../components/BackButton/backButton";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/SupabaseClient";
+import Spinner from "../../components/Spinner/spinner";
 
 function CategoryDetails() {
     const { id } = useParams();
@@ -32,6 +33,7 @@ function CategoryDetails() {
                 console.log('dataaaaaa', data);
 
                 setStoreDetails([data]);
+                setLoading(false)
             } catch (err) {
                 alert(err.message);
             } finally {
@@ -43,7 +45,12 @@ function CategoryDetails() {
     }, [id]);
 
     const store = storeDetails?.find((s) => s.id === parseInt(id));
-
+    if (loading) {
+        return (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: 'center', padding: "20px", height: '50vh' }}>
+                <Spinner />
+            </div>)
+    }
     if (!store) return <Typography sx={{ mt: 3 }}>Store not found</Typography>;
 
     return (

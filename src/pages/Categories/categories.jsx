@@ -6,7 +6,7 @@ import {
     Card,
     CardContent,
     CardMedia,
-    Box
+    Box,
 } from "@mui/material";
 import { supabase } from "../../utils/SupabaseClient";
 import { useEffect, useState } from "react";
@@ -15,9 +15,11 @@ function CategoryPage() {
     const { category } = useParams();
     const navigate = useNavigate();
     const [stores, setStores] = useState([])
+    const [loading, setLoading] = useState(false)
 
     async function getProducts() {
         try {
+            setLoading(true)
             const { data, error } = await supabase
                 .from("categories")
                 .select("*")
@@ -26,9 +28,13 @@ function CategoryPage() {
             if (data != null) {
                 console.log('data', data);
                 setStores(data)
+
+                setLoading(false)
             }
         } catch (error) {
             alert(error.message);
+
+            setLoading(false)
         }
     }
 
@@ -44,6 +50,12 @@ function CategoryPage() {
         .replace(/-/g, " ")
         .replace(/\b\w/g, (c) => c.toUpperCase());
 
+    if (loading) {
+        return (
+            <div style={{ display: "flex", justifyContent: "center", alignItems: 'center', padding: "20px", height: '50vh' }}>
+                <Spinner />
+            </div>)
+    }
     return (
         <Container sx={{ mt: 3 }}>
             <Typography variant="h5" sx={{ mb: 2, fontWeight: 600 }}>
@@ -93,5 +105,6 @@ function CategoryPage() {
         </Container>
     );
 }
+import Spinner from "../../components/Spinner/spinner";
 
 export default CategoryPage;
