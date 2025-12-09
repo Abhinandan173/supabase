@@ -15,6 +15,7 @@ import {
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { supabase } from "../../utils/SupabaseClient";
 
+
 const categories = [
     "Plumber",
     "Rikshaw",
@@ -25,6 +26,7 @@ const categories = [
     "Tailor",
     "Saloon",
     "Photographer",
+    "Coaching Classes",
 ];
 
 function CreateStore() {

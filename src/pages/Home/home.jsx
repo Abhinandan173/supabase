@@ -15,22 +15,21 @@ function Home() {
         "Tailor",
         "Saloon",
         "Photographer",
-        "Tuition Teacher",
-        "Hotels"
+        "Coaching Classes",
     ];
 
     const settings = {
-        dots: true,             // show navigation dots
-        infinite: true,          // loop slides infinitely
-        speed: 1000,             // transition speed in ms
+        dots: true,
+        infinite: true,
+        // speed: 1000,
         slidesToShow: 1,
         slidesToScroll: 1,
         centerMode: false,
         centerPadding: "40px",
-        arrows: false,           // hide arrows
-        autoplay: true,          // enable auto-slide
-        autoplaySpeed: 3000,     // slide every 3 seconds
-        cssEase: "ease-in-out",  // smooth transition
+        arrows: false,
+        autoplay: false,
+        // autoplaySpeed: 3000,
+        cssEase: "ease-in-out",
         responsive: [
             {
                 breakpoint: 600,
@@ -104,7 +103,7 @@ function Home() {
                             Advertise Here!
                         </Typography>
                         <Typography>
-                            Contact: <strong>999999999</strong>
+                            Contact: <strong>9876543210</strong>
                         </Typography>
                     </CardContent>
                 </Card>
@@ -122,6 +121,7 @@ function Home() {
                         borderRadius: 3,
                         boxShadow: 3
                     }}
+                    onClick={() => navigate("/create-store")}
                 >
                     <CardContent
                         sx={{
@@ -134,12 +134,10 @@ function Home() {
                             padding: 0
                         }}
                     >
-                        <Typography variant="h6" sx={{ mb: 1 }}>
+                        {/* <Typography variant="h6" sx={{ mb: 1 }}>
                             Create Your Store
-                        </Typography>
-                        <Typography>
-                            Please contact: <strong>999999999</strong>
-                        </Typography>
+                        </Typography> */}
+                        <Button sx={{ color: 'black', fontWeight: 'bold', border: '1px solid black' }} variant="outlined">Create Your Store</Button>
                     </CardContent>
                 </Card>
             </Slider>
