@@ -7,8 +7,13 @@ import {
     MenuItem,
     Grid,
     Box,
+    Dialog,
+    DialogTitle,
+    DialogActions,
+    DialogContent,
 } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import { supabase } from "../../utils/SupabaseClient";
 
 const categories = [
     "Plumber",
@@ -33,6 +38,8 @@ function CreateStore() {
         contactNumber: "",
         images: [],
     });
+    const [alert, setAlert] = useState({ show: false, msg: "", type: "" });
+    const [loading, setLoading] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -44,25 +51,95 @@ function CreateStore() {
         setStoreData((prev) => ({ ...prev, images: [...prev.images, ...files] }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert('under construction')
-        return
+        setLoading(true)
+        const {
+            name,
+            description,
+            openTime,
+            closeTime,
+            village,
+            category,
+            contactNumber,
+            images
+        } = storeData;
 
-        // Validate mandatory fields
-        const { name, description, openTime, closeTime, village, category, contactNumber } = storeData;
         if (!name || !description || !openTime || !closeTime || !village || !category || !contactNumber) {
-            alert("Please fill all mandatory fields!");
+            setAlert({ show: true, msg: "Please fill all mandatory fields!", type: "success" });
+            return;
+        }
+        if (images.length === 0) {
+            setAlert({ show: true, msg: "Please Upload atleast 2 images", type: "success" });
+            setLoading(false);
             return;
         }
 
-        // If validation passed
-        console.log(storeData);
-        alert("Store submitted successfully!");
+        try {
+            let uploadedImageUrls = []
+
+            for (let i = 0; i < images.length; i++) {
+                const file = images[i];
+                const fileName = `${Date.now()}-${file.name}`;
+
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from("avatars")
+                    .upload(fileName, file);
+
+                if (uploadError) throw uploadError;
+
+                const publicUrl = supabase.storage
+                    .from("avatars")
+                    .getPublicUrl(fileName).data.publicUrl;
+
+                uploadedImageUrls.push(publicUrl);
+            }
+            const { data, error } = await supabase
+                .from("categories")
+                .insert([
+                    {
+                        id: Math.floor(100000 + Math.random() * 900000),
+                        name,
+                        description,
+                        openTime,
+                        closeTime,
+                        location: village,
+                        category,
+                        contact: contactNumber,
+                        image: uploadedImageUrls?.at(0),
+                        gallery: uploadedImageUrls?.join(',')
+                    }
+                ]);
+
+            if (error) throw error;
+            setAlert({ show: true, msg: "Store created successfully!", type: "success" });
+
+            setStoreData({
+                name: "",
+                description: "",
+                openTime: "",
+                closeTime: "",
+                village: "",
+                category: "",
+                contactNumber: "",
+                images: [],
+            });
+
+            setLoading(false)
+        } catch (err) {
+            setAlert({ show: true, msg: err.message, type: "error" });
+            setLoading(false)
+        }
     };
+
 
     return (
         <Container sx={{ mt: 3 }}>
+            <Dialog closeAfterTransition open={alert?.show} onClose={() => setAlert({ show: false })}>
+                <DialogContent>
+                    {alert?.msg}
+                </DialogContent>
+            </Dialog>
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
                 Create Your Store
             </Typography>
@@ -198,7 +275,7 @@ function CreateStore() {
 
                     {/* Submit */}
                     <Grid item xs={12} sx={{ width: '100%' }}>
-                        <Button type="submit" variant="contained" fullWidth>
+                        <Button loading={loading} type="submit" variant="contained" fullWidth>
                             Submit Store
                         </Button>
                     </Grid>
