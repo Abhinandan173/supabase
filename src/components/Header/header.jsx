@@ -12,6 +12,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
+import { AddCircleOutline, Home } from "@mui/icons-material";
 
 function Header() {
     const navigate = useNavigate();
@@ -54,7 +55,7 @@ function Header() {
                 <List sx={{ width: 250 }}>
                     <ListItem disablePadding>
                         <ListItemButton onClick={() => { navigate("/"); setOpen(false); }}>
-                            <ListItemText primary="Home" />
+                            <ListItemText primary="Home" /> <Home />
                         </ListItemButton>
                     </ListItem>
 
@@ -62,7 +63,7 @@ function Header() {
 
                     <ListItem disablePadding>
                         <ListItemButton onClick={() => { navigate("/create-store"); setOpen(false); }}>
-                            <ListItemText primary="Create Store" />
+                            <ListItemText primary="Create Store" /> <AddCircleOutline />
                         </ListItemButton>
                     </ListItem>
                 </List>

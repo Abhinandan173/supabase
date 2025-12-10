@@ -16,6 +16,7 @@ function Home() {
         "Saloon",
         "Photographer",
         "Coaching Classes",
+        "Other"
     ];
 
     const settings = {
@@ -137,7 +138,7 @@ function Home() {
                         {/* <Typography variant="h6" sx={{ mb: 1 }}>
                             Create Your Store
                         </Typography> */}
-                        <Button sx={{ color: 'black', fontWeight: 'bold', border: '1px solid black' }} variant="outlined">Create Your Store</Button>
+                        <Button sx={{ color: 'white', fontWeight: 'bold', border: '1px solid white' }} variant="outlined">Create Your Store</Button>
                     </CardContent>
                 </Card>
             </Slider>

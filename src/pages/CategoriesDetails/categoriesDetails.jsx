@@ -30,7 +30,6 @@ function CategoryDetails() {
                     .single(); // fetch a single record
 
                 if (error) throw error;
-                console.log('dataaaaaa', data);
 
                 setStoreDetails([data]);
                 setLoading(false)
@@ -45,6 +44,8 @@ function CategoryDetails() {
     }, [id]);
 
     const store = storeDetails?.find((s) => s.id === parseInt(id));
+    console.log('sss', new Date().toLocaleDateString("en-US", { weekday: "long" }));
+
     if (loading) {
         return (
             <div style={{ display: "flex", justifyContent: "center", alignItems: 'center', padding: "20px", height: '50vh' }}>
@@ -65,17 +66,16 @@ function CategoryDetails() {
                 <Card sx={{ mb: 2 }}>
                     <CardMedia
                         component="img"
-                        image={'https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI'}
+                        image={store.gallery?.split(',')?.at(0)}
                         alt={store.name}
                         sx={{ width: "100%", height: 200, objectFit: "cover" }}
                     />
                     <CardContent>
+                        {store?.closeDay == new Date().toLocaleDateString("en-US", { weekday: "long" }) && <Typography variant="body2" sx={{ mb: 0.5, color: 'red' }}>
+                            Closed Today
+                        </Typography>}
                         <Typography variant="body1" sx={{ mb: 1 }}>
                             {store.description}
-                        </Typography>
-
-                        <Typography variant="body2" sx={{ mb: 0.5 }}>
-                            <strong>Contact:</strong> {store.contact}
                         </Typography>
                         <Typography variant="body2" sx={{ mb: 0.5 }}>
                             <strong>Open Time:</strong> {store.openTime}
@@ -103,10 +103,9 @@ function CategoryDetails() {
                         </Typography>
 
                         <Grid container spacing={2} >
-                            {store.gallery?.split(',')?.map((img, index) => (
+                            {store.gallery?.split(',')?.reverse()?.map((img, index) => (
                                 <Grid sx={{ width: '100%' }} item xs={12} sm={6} md={4} key={index}>
                                     <Card>
-                                        {console.log('iiii', store.gallery?.split(','))}
                                         <CardMedia
                                             component="img"
                                             image={img ?? 'https://fastly.picsum.photos/id/9/5000/3269.jpg?hmac=cZKbaLeduq7rNB8X-bigYO8bvPIWtT-mh8GRXtU3vPc'}
@@ -119,7 +118,7 @@ function CategoryDetails() {
                         </Grid>
                     </Box>
                 )}
-            </Container>
+            </Container >
         </>
     );
 }

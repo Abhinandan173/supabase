@@ -27,7 +27,11 @@ const categories = [
     "Saloon",
     "Photographer",
     "Coaching Classes",
+    "Other"
 ];
+
+const days = ['No Close', "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
 
 function CreateStore() {
     const [storeData, setStoreData] = useState({
@@ -39,6 +43,7 @@ function CreateStore() {
         category: "",
         contactNumber: "",
         images: [],
+        closeDay: null
     });
     const [alert, setAlert] = useState({ show: false, msg: "", type: "" });
     const [loading, setLoading] = useState(false)
@@ -53,6 +58,19 @@ function CreateStore() {
         setStoreData((prev) => ({ ...prev, images: [...prev.images, ...files] }));
     };
 
+    function convertTo12Hour(time24) {
+        if (!time24) return null;
+
+        let [hour, minute] = time24.split(":");
+        hour = parseInt(hour, 10);
+
+        const ampm = hour >= 12 ? "PM" : "AM";
+        hour = hour % 12 || 12; // convert 0 → 12
+
+        return `${hour}:${minute} ${ampm}`;
+    }
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true)
@@ -64,7 +82,8 @@ function CreateStore() {
             village,
             category,
             contactNumber,
-            images
+            images,
+            closeDay
         } = storeData;
 
         if (!name || !description || !openTime || !closeTime || !village || !category || !contactNumber) {
@@ -76,6 +95,9 @@ function CreateStore() {
             setLoading(false);
             return;
         }
+
+        const openTime12 = convertTo12Hour(openTime);
+        const closeTime12 = convertTo12Hour(closeTime);
 
         try {
             let uploadedImageUrls = []
@@ -103,10 +125,11 @@ function CreateStore() {
                         id: Math.floor(100000 + Math.random() * 900000),
                         name,
                         description,
-                        openTime,
-                        closeTime,
+                        openTime: openTime12,
+                        closeTime: closeTime12,
                         location: village,
                         category,
+                        closeDay: closeDay == 'No Close' ? null : closeDay,
                         contact: contactNumber,
                         image: uploadedImageUrls?.at(0),
                         gallery: uploadedImageUrls?.join(',')
@@ -123,6 +146,7 @@ function CreateStore() {
                 closeTime: "",
                 village: "",
                 category: "",
+                closeDay: null,
                 contactNumber: "",
                 images: [],
             });
@@ -138,9 +162,10 @@ function CreateStore() {
     return (
         <Container sx={{ mt: 3 }}>
             <Dialog closeAfterTransition open={alert?.show} onClose={() => setAlert({ show: false })}>
-                <DialogContent>
+                <DialogContent >
                     {alert?.msg}
                 </DialogContent>
+                <Button onClick={() => setAlert({ show: false })}>Ok</Button>
             </Dialog>
             <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
                 Create Your Store
@@ -200,6 +225,23 @@ function CreateStore() {
                             InputLabelProps={{ shrink: true }}
                             required
                         />
+                    </Grid>
+
+                    <Grid item xs={12} sx={{ width: '100%' }}>
+                        <TextField
+                            select
+                            label="Close Day"
+                            name="closeDay"
+                            value={storeData.closeDay}
+                            onChange={handleChange}
+                            fullWidth
+                        >
+                            {days.map((day) => (
+                                <MenuItem key={day} value={day}>
+                                    {day}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
 
                     {/* Village */}

@@ -10,9 +10,10 @@ function GoBackButton({ text = "Go Back" }) {
             sx={{
                 display: "flex",
                 alignItems: "center",
-                mb: -1, // margin bottom
-                mt: 1, // margin top
+                mb: '-3%',
+                mt: 1,
                 cursor: "pointer",
+                ml: '4%'
             }}
             onClick={() => navigate(-1)}
         >
